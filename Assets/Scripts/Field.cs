@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,38 +9,36 @@ namespace Farm.Core
         public UnityAction CellSelected;
         public UnityAction CellDeselected;
 
-        [SerializeField] private PrefabsStorage _prefabsStorage;
-        private List<Cell> _cells;
+        public List<Cell> Cells { get; private set; }
+
         private Cell _selectedCell;
-        public Dictionary<int, Crop> Crops { get; private set; }
         private Inventory _inventory;
 
         public void Init(List<Cell> cells, Inventory inventory)
         {
             _inventory = inventory;
-            _cells = cells;
-            for (int i = 0; i < _cells.Count; i++)
+            Cells = cells;
+            for (int i = 0; i < Cells.Count; i++)
             {
-                _cells[i].Clicked += CheckCell;
+                Cells[i].Clicked += CheckCell;
             }
-            Crops = new Dictionary<int, Crop>();
         }
 
         private void Update()
         {
-            foreach (var crop in Crops.Values)
+            for (int i = 0; i < Cells.Count; i++)
             {
-                (crop as IUpdateable).Tick(Time.deltaTime);
+                (Cells[i] as IUpdateable).Tick(Time.deltaTime);
             }
         }
 
         public void CheckCell(Cell cell)
         {
-            if (Crops.ContainsKey(cell.Id))
+            if (!cell.IsFree)
             {
-                if (Crops[cell.Id].Progress == 1)
+                if (cell.Crop.Progress == 1)
                 {
-                    _inventory.Add(Crops[cell.Id].Collect());
+                    _inventory.Add(cell.Crop.Collect());
                 }
 
                 return;
@@ -77,29 +74,36 @@ namespace Farm.Core
             CellDeselected?.Invoke();
         }
 
-        public void Place(CropSettings cropSettings)
+        public void TrySummonCrop(CropSettings cropSettings)
         {
-            // TODO:
-            _inventory.Remove(cropSettings.Requirement);
             if (_selectedCell == null)
             {
-                throw new System.Exception("Cell is not selected");
+                return;
             }
-            Crop crop = new Crop();
-            crop.Init(cropSettings.GrowTime, cropSettings.Output);
-            Crops.Add(_selectedCell.Id, crop);
 
-            // Check if free
-            GameObject newObj = Instantiate(cropSettings.Prefab);
-            _selectedCell.Place(newObj);
+            if (cropSettings.Requirement.Quantity > 0)
+            {
+                if (!_inventory.Has(cropSettings.Requirement))
+                {
+                    return;
+                }
+
+                _inventory.Remove(cropSettings.Requirement);
+            }
+
+            if (_selectedCell.IsFree)
+            {
+                _selectedCell.SummonCrop(cropSettings);
+            }
+
             DeselectCell();
         }
 
         private void OnDestroy()
         {
-            for (int i = 0; i < _cells.Count; i++)
+            for (int i = 0; i < Cells.Count; i++)
             {
-                _cells[i].Clicked -= CheckCell;
+                Cells[i].Clicked -= CheckCell;
             }
         }
     }

@@ -24,5 +24,18 @@ namespace Farm.Core
 
             return result;
         }
+
+        public List<Cell> CreateCells(int cellsCount)
+        {
+            List<Cell> result = new List<Cell>();
+
+            for (int i = 1; i <= cellsCount; i++)
+            {
+                Cell cell = Instantiate(_cellPrefab, Vector3.zero, Quaternion.identity, transform);
+                result.Add(cell);
+            }
+
+            return result;
+        }
     }
 }

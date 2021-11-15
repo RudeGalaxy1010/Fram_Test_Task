@@ -15,8 +15,8 @@ MonoBehaviour:
   Name: Wheat
   GrowTime: 1
   Requirement:
-    Item: {fileID: 11400000, guid: 02d6ff5260012824483629a81ba86a89, type: 2}
-    Quantity: 1
+    Item: {fileID: 0}
+    Quantity: 0
   Output:
     Item: {fileID: 11400000, guid: a0a11b18346508d4e9d0b66cac709e90, type: 2}
     Quantity: 1

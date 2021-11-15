@@ -5,24 +5,21 @@ using Farm.Core;
 
 public class Serializer
 {
-    private List<CropSaveData> _cropSaves;
+    private List<CellSaveData> _cropSaves;
     private InventorySaveData _inventorySaveData;
 
-    public void Serialize(Field field, Inventory inventory)
+    public string Serialize(PrefabStorage prefabStorage, List<Cell> cells, Inventory inventory)
     {
-        _cropSaves = new List<CropSaveData>();
+        _cropSaves = new List<CellSaveData>();
 
-        foreach (var crop in field.Crops)
+        for (int i = 0; i < cells.Count; i++)
         {
-            int cellId = crop.Key;
-            Crop cropData = crop.Value;
-
-            _cropSaves.Add(new CropSaveData
+            _cropSaves.Add(new CellSaveData
             {
-                CellId = cellId,
-                GrowTime = cropData.GrowTime,
-                GrowTimer = cropData.GrowTimer,
-                Output = cropData.Output
+                CellId = cells[i].Id,
+                CropId = cells[i].CropId,
+                Position = cells[i].transform.position,
+                Crop = cells[i].Crop
             });
         }
 
@@ -30,28 +27,32 @@ public class Serializer
 
         SaveData saveData = new SaveData
         {
-            CropSaves = _cropSaves,
+            CellSaves = _cropSaves,
             InventorySaveData = _inventorySaveData
         };
 
-        string result = JsonUtility.ToJson(saveData);
-        Debug.Log(result);
+        return JsonUtility.ToJson(saveData);
+    }
+
+    public SaveData Deserialize(string jsonString)
+    {
+        return JsonUtility.FromJson<SaveData>(jsonString);
     }
 
     [Serializable]
     public struct SaveData
     {
-        public List<CropSaveData> CropSaves;
+        public List<CellSaveData> CellSaves;
         public InventorySaveData InventorySaveData;
     }
 
     [Serializable]
-    public struct CropSaveData
+    public struct CellSaveData
     {
         public int CellId;
-        public float GrowTime;
-        public float GrowTimer;
-        public Resource Output;
+        public int CropId;
+        public Vector3 Position;
+        public Crop Crop;
     }
 
     [Serializable]

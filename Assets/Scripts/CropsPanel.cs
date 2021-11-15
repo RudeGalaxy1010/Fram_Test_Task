@@ -8,18 +8,30 @@ namespace Farm.UI
 {
     public class CropsPanel : MonoBehaviour
     {
-        [SerializeField] private List<Image> Frames;
-
+        [SerializeField] private PrefabStorage _prefabStorage;
+        [SerializeField] private Transform _buttonsHandler;
+        [SerializeField] private CropItemButton _buttonPrefab;
+        private List<CropItemButton> _buttons;
         private CropItemButton _selectedButton;
-        private Inventory _inventory;
         private Field _field;
 
-        public void Init(Field field, Inventory inventory)
+        public void Init(Field field)
         {
             Hide();
             _field = field;
             _field.CellSelected += Show;
             _field.CellDeselected += Hide;
+
+            _buttons = new List<CropItemButton>();
+
+            for (int i = 0; i < _prefabStorage.Crops.Count; i++)
+            {
+                CropItemButton button = Instantiate(_buttonPrefab, _buttonsHandler.transform.position, 
+                    Quaternion.identity, _buttonsHandler);
+                button.Init(_prefabStorage.Crops[i]);
+                button.GetComponent<Button>().onClick.AddListener(() => SelectItem(button));
+                _buttons.Add(button);
+            }
         }
 
         public void Show()
@@ -45,13 +57,7 @@ namespace Farm.UI
                 return;
             }
 
-            //if (!_inventory.Has(_selectedCrop.Requirement))
-            //{
-            //    return;
-            //}
-
-            //_inventory.Remove(_selectedCrop.Requirement);
-            _field.Place(_selectedButton.Crop);
+            _field.TrySummonCrop(_selectedButton.Crop);
             _selectedButton.Deselect();
             _selectedButton = null;
         }
@@ -60,6 +66,11 @@ namespace Farm.UI
         {
             _field.CellSelected -= Show;
             _field.CellDeselected -= Hide;
+
+            for (int i = 0; i < _buttons.Count; i++)
+            {
+                _buttons[i].GetComponent<Button>().onClick.RemoveAllListeners();
+            }
         }
     }
 }

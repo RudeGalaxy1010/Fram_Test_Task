@@ -6,9 +6,15 @@ using UnityEngine.UI;
 public class CropItemButton : MonoBehaviour
 {
     [SerializeField] private Image _frame;
-    [SerializeField] private CropSettings _cropSettings;
+
+    private CropSettings _cropSettings;
 
     public CropSettings Crop => _cropSettings;
+
+    public void Init(CropSettings cropSettings)
+    {
+        _cropSettings = cropSettings;
+    }
 
     public void Select()
     {

@@ -1,11 +1,12 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Farm.Core
 {
-    public class Crop : IUpdateable
+    [Serializable]
+    public class Crop
     {
         public UnityAction<float> Updated;
 
@@ -22,7 +23,7 @@ namespace Farm.Core
             Output = new Resource(output);
         }
 
-        public void Tick(float value)
+        public void AddProgress(float value)
         {
             if (GrowTimer >= GrowTime)
             {
