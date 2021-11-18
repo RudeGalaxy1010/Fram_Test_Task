@@ -37,9 +37,18 @@ namespace Farm.Core
         {
             if (!cell.IsFree)
             {
-                if (cell.Crop.Progress == 1)
+                if (cell.Productable.OutputStorage.Quantity > 0)
                 {
-                    _inventory.Add(cell.Crop.Collect());
+                    _inventory.Add(cell.Productable.Collect());
+                }
+                else
+                {
+                    Animal animal = cell.Productable as Animal;
+                    if (animal != null && _inventory.Has(animal.Input.Resource))
+                    {
+                        _inventory.Remove(animal.Input.Resource);
+                        animal.AddInput();
+                    }
                 }
 
                 return;
@@ -77,17 +86,26 @@ namespace Farm.Core
 
         public void TrySummonCrop(CropSettings cropSettings)
         {
-            if (_selectedCell == null)
+            if (_selectedCell == null || !_selectedCell.IsFree)
             {
                 return;
             }
 
-            if (_selectedCell.IsFree)
+            Crop crop = new Crop(cropSettings.GrowTime, cropSettings.Output);
+            _selectedCell.SummonProductable(crop, cropSettings.Prefab);
+
+            DeselectCell();
+        }
+
+        public void TrySummonAnimal(AnimalSettings animalSettings)
+        {
+            if (_selectedCell == null || !_selectedCell.IsFree)
             {
-                Crop crop = new Crop();
-                crop.Init(cropSettings);
-                _selectedCell.SummonCrop(crop, cropSettings.Prefab);
+                return;
             }
+
+            Animal animal = new Animal(animalSettings.ProductionTime, animalSettings.Input, animalSettings.Output);
+            _selectedCell.SummonProductable(animal, animalSettings.Prefab);
 
             DeselectCell();
         }

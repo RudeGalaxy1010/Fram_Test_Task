@@ -6,7 +6,7 @@ public class AnimalSettings : ScriptableObject
     public int Id;
     public string Name;
     public float ProductionTime;
-    public ConsumationResource Requirement;
+    public ConsumableResource Input;
     public Resource Output;
-    public GameObject Prefab;
+    public View Prefab;
 }

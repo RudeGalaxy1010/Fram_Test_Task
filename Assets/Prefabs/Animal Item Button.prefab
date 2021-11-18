@@ -87,9 +87,9 @@ GameObject:
   - component: {fileID: 5203703667471910263}
   - component: {fileID: 5203703667471910262}
   - component: {fileID: 5203703667471910261}
-  - component: {fileID: 5203703667471910216}
+  - component: {fileID: 2900510799017814770}
   m_Layer: 5
-  m_Name: Crop Item Button
+  m_Name: Animal Item Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -199,7 +199,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5203703667471910216
+--- !u!114 &2900510799017814770
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -208,7 +208,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5203703667471910259}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82161eeb02e219846afb830c2ea25fcb, type: 3}
+  m_Script: {fileID: 11500000, guid: 3315b58b23672064db5d541edf45d85d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _name: {fileID: 5203703667963420077}

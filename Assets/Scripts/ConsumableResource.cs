@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public struct ConsumationResource
+public struct ConsumableResource
 {
     public Resource Resource;
     public float ConsumingTime;

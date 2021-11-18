@@ -15,7 +15,7 @@ MonoBehaviour:
   Id: 0
   Name: Cow
   ProductionTime: 20
-  Requirement:
+  Input:
     Resource:
       Item: {fileID: 11400000, guid: a0a11b18346508d4e9d0b66cac709e90, type: 2}
       Quantity: 1
@@ -23,4 +23,4 @@ MonoBehaviour:
   Output:
     Item: {fileID: 11400000, guid: 48a767c95922a064a96fdb16d9d002db, type: 2}
     Quantity: 1
-  Prefab: {fileID: 0}
+  Prefab: {fileID: 237997240792759739, guid: a536ab1bb75fd644582d88c6b948ff97, type: 3}

@@ -9,5 +9,5 @@ public class CropSettings : ScriptableObject
     public string Name;
     public float GrowTime;
     public Resource Output;
-    public GameObject Prefab;
+    public View Prefab;
 }

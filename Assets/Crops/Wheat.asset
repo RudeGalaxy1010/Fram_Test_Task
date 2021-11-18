@@ -12,12 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b5cf67479577084d92afa2493208d90, type: 3}
   m_Name: Wheat
   m_EditorClassIdentifier: 
+  Id: 0
   Name: Wheat
-  GrowTime: 1
-  Requirement:
-    Item: {fileID: 0}
-    Quantity: 0
+  GrowTime: 10
   Output:
     Item: {fileID: 11400000, guid: a0a11b18346508d4e9d0b66cac709e90, type: 2}
     Quantity: 1
-  Prefab: {fileID: 5141043495775941665, guid: 7a5a7d65260ede042953a0e939d60bd3, type: 3}
+  Prefab: {fileID: 363190654348989376, guid: 7a5a7d65260ede042953a0e939d60bd3, type: 3}

@@ -9,11 +9,12 @@ namespace Farm.UI
     public class CropsPanel : MonoBehaviour
     {
         [SerializeField] private PrefabStorage _prefabStorage;
-        [SerializeField] private Transform _cropButtonsHandler;
-        [SerializeField] private Transform _animalButtonsHandler;
-        [SerializeField] private CropItemButton _buttonPrefab;
-        private List<CropItemButton> _buttons;
-        private CropItemButton _selectedButton;
+        [SerializeField] private Transform _buttonsHandler;
+        [SerializeField] private CropItemButton _cropButtonPrefab;
+        [SerializeField] private AnimalItemButton _animalButtonPrefab;
+
+        private List<ItemButton> _buttons;
+        private ItemButton _selectedButton;
         private Field _field;
 
         public void Init(Field field)
@@ -23,13 +24,22 @@ namespace Farm.UI
             _field.CellSelected += Show;
             _field.CellDeselected += Hide;
 
-            _buttons = new List<CropItemButton>();
+            _buttons = new List<ItemButton>();
 
             for (int i = 0; i < _prefabStorage.Crops.Count; i++)
             {
-                CropItemButton button = Instantiate(_buttonPrefab, _cropButtonsHandler.transform.position, 
-                    Quaternion.identity, _cropButtonsHandler);
+                CropItemButton button = Instantiate(_cropButtonPrefab, _buttonsHandler.transform.position, 
+                    Quaternion.identity, _buttonsHandler);
                 button.Init(_prefabStorage.Crops[i]);
+                button.GetComponent<Button>().onClick.AddListener(() => SelectItem(button));
+                _buttons.Add(button);
+            }
+
+            for (int i = 0; i < _prefabStorage.Animals.Count; i++)
+            {
+                AnimalItemButton button = Instantiate(_animalButtonPrefab, _buttonsHandler.transform.position,
+                                    Quaternion.identity, _buttonsHandler);
+                button.Init(_prefabStorage.Animals[i]);
                 button.GetComponent<Button>().onClick.AddListener(() => SelectItem(button));
                 _buttons.Add(button);
             }
@@ -45,7 +55,7 @@ namespace Farm.UI
             gameObject.SetActive(false);
         }
 
-        public void SelectItem(CropItemButton cropItemButton)
+        public void SelectItem(ItemButton cropItemButton)
         {
             _selectedButton = cropItemButton;
             _selectedButton.Select();
@@ -58,7 +68,18 @@ namespace Farm.UI
                 return;
             }
 
-            _field.TrySummonCrop(_selectedButton.Crop);
+            CropItemButton cropButton = _selectedButton as CropItemButton;
+            if (cropButton != null)
+            {
+                _field.TrySummonCrop(cropButton.Crop);
+            }
+
+            AnimalItemButton animalButton = _selectedButton as AnimalItemButton;
+            if (animalButton != null)
+            {
+                _field.TrySummonAnimal(animalButton.Animal);
+            }
+
             _selectedButton.Deselect();
             _selectedButton = null;
         }
