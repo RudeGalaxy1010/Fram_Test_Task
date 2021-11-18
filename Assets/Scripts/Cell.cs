@@ -12,37 +12,38 @@ namespace Farm.Core
 
         public int Id { get; private set; }
         public Crop Crop { get; private set; }
-        public int CropId { get; private set; }
+        public Animal Animal { get; private set; }
 
         private GameObject _view { get; set; }
 
-        public bool IsFree => Crop == null;
+        public bool IsFree => Crop == null && Animal == null;
 
         public void Init(int id)
         {
             Id = id;
-            CropId = -1;
+            Crop = null;
         }
 
-        public void Init(int id, Crop crop, CropSettings settings)
+        public void SummonCrop(Crop crop, GameObject prefab)
         {
-            Id = id;
-            Crop = crop;
-            CropId = settings.Id;
-            _view = Instantiate(settings.Prefab, transform.position + _itemsOffset, Quaternion.identity, transform);
-        }
-
-        public void SummonCrop(CropSettings settings)
-        {
-            if (Crop != null)
+            if (!IsFree)
             {
                 throw new System.Exception("Cell is not free");
             }
 
-            CropId = settings.Id;
-            Crop = new Crop();
-            Crop.Init(settings.GrowTime, settings.Output);
-            _view = Instantiate(settings.Prefab, transform.position + _itemsOffset, Quaternion.identity, transform);
+            Crop = crop;
+            _view = Instantiate(prefab, transform.position + _itemsOffset, Quaternion.identity, transform);
+        }
+
+        public void SummonAnimal(Animal animal, GameObject prefab)
+        {
+            if (!IsFree)
+            {
+                throw new System.Exception("Cell is not free");
+            }
+
+            Animal = animal;
+            _view = Instantiate(prefab, transform.position + _itemsOffset, Quaternion.identity, transform);
         }
 
         public void OnClick()
@@ -53,17 +54,21 @@ namespace Farm.Core
         public void Clear()
         {
             Crop = null;
+            Animal = null;
             Destroy(_view);
         }
 
         public void Tick(float value)
         {
-            if (Crop == null)
+            if (Crop != null)
             {
-                return;
+                Crop.AddProgress(value);
             }
 
-            Crop.AddProgress(value);
+            if (Animal != null)
+            {
+                Animal.AddProgress(value);
+            }
         }
     }
 }

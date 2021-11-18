@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b5597e0476266549bc2a5cab2b7baa5, type: 3}
+  m_Name: Chicken
+  m_EditorClassIdentifier: 
+  Id: 1
+  Name: Chicken
+  ProductionTime: 10
+  Requirement:
+    Resource:
+      Item: {fileID: 11400000, guid: a0a11b18346508d4e9d0b66cac709e90, type: 2}
+      Quantity: 1
+    ConsumingTime: 30
+  Output:
+    Item: {fileID: 11400000, guid: 6e99684a8bee6c741870d18fd8755cb6, type: 2}
+    Quantity: 1
+  Prefab: {fileID: 0}

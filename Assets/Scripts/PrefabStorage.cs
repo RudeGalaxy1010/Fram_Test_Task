@@ -6,6 +6,8 @@ using UnityEngine;
 public class PrefabStorage : ScriptableObject
 {
     [SerializeField] private List<CropSettings> _crops;
+    [SerializeField] private List<AnimalSettings> _animals;
 
     public IReadOnlyList<CropSettings> Crops => _crops;
+    public IReadOnlyList<AnimalSettings> Animals => _animals;
 }

@@ -9,7 +9,8 @@ namespace Farm.UI
     public class CropsPanel : MonoBehaviour
     {
         [SerializeField] private PrefabStorage _prefabStorage;
-        [SerializeField] private Transform _buttonsHandler;
+        [SerializeField] private Transform _cropButtonsHandler;
+        [SerializeField] private Transform _animalButtonsHandler;
         [SerializeField] private CropItemButton _buttonPrefab;
         private List<CropItemButton> _buttons;
         private CropItemButton _selectedButton;
@@ -26,8 +27,8 @@ namespace Farm.UI
 
             for (int i = 0; i < _prefabStorage.Crops.Count; i++)
             {
-                CropItemButton button = Instantiate(_buttonPrefab, _buttonsHandler.transform.position, 
-                    Quaternion.identity, _buttonsHandler);
+                CropItemButton button = Instantiate(_buttonPrefab, _cropButtonsHandler.transform.position, 
+                    Quaternion.identity, _cropButtonsHandler);
                 button.Init(_prefabStorage.Crops[i]);
                 button.GetComponent<Button>().onClick.AddListener(() => SelectItem(button));
                 _buttons.Add(button);

@@ -8,35 +8,35 @@ namespace Farm.Core
     public class Starter : MonoBehaviour
     {
         [SerializeField] private FieldGenerator _fieldGenerator;
-        [SerializeField] private PrefabStorage _prefabStorage;
+        [SerializeField] private PrefabStorage _storage;
         [SerializeField] private Field _field;
         [SerializeField] private CropsPanel _cropsPanel;
 
         private Inventory _inventory;
-        private Serializer _serializer;
+        private JsonSerializer _serializer;
+        private PlayerPrefsSaveSystem _saveSystem;
 
         private void Start()
         {
             //PlayerPrefs.DeleteAll();
-            _serializer = new Serializer();
+            _serializer = new JsonSerializer();
+            _saveSystem = new PlayerPrefsSaveSystem(_serializer);
             _inventory = new Inventory();
             List<Cell> cells = new List<Cell>();
 
-            if (PlayerPrefs.HasKey("Test_Save"))
+            if (_saveSystem.HasSave)
             {
-                var data = _serializer.Deserialize(PlayerPrefs.GetString("Test_Save"));
+                Debug.Log("Loading");
+                var data = _saveSystem.Load();
                 _inventory.Init(data.InventorySaveData.Resources);
                 cells = _fieldGenerator.CreateCells(data.CellSaves.Count);
                 for (int i = 0; i < cells.Count; i++)
                 {
+                    cells[i].Init(data.CellSaves[i].CellId);
                     cells[i].transform.position = data.CellSaves[i].Position;
-                    if (data.CellSaves[i].CropId < 0)
+                    if (data.CellSaves[i].Crop.SettingsId >= 0)
                     {
-                        cells[i].Init(data.CellSaves[i].CellId);
-                    }
-                    else
-                    {
-                        cells[i].Init(data.CellSaves[i].CellId, data.CellSaves[i].Crop, _prefabStorage.Crops[data.CellSaves[i].CropId]);
+                        cells[i].SummonCrop(data.CellSaves[i].Crop, _storage.Crops[data.CellSaves[i].Crop.SettingsId].Prefab);
                     }
                 }
             }
@@ -54,9 +54,38 @@ namespace Farm.Core
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
-                string saveData = _serializer.Serialize(_prefabStorage, _field.Cells, _inventory);
-                PlayerPrefs.SetString("Test_Save", saveData);
+                SaveAll();
+                Debug.Log("Saving...");
             }
+        }
+
+        private void SaveAll()
+        {
+            InventorySaveData inventoryData = new InventorySaveData
+            {
+                Resources = _inventory.Resources
+            };
+
+            List<CellSaveData> cellsData = new List<CellSaveData>();
+
+            for (int i = 0; i < _field.Cells.Count; i++)
+            {
+                CellSaveData cellData = new CellSaveData
+                {
+                    CellId = _field.Cells[i].Id,
+                    Position = _field.Cells[i].transform.position,
+                    Crop = _field.Cells[i].Crop
+            };
+                cellsData.Add(cellData);
+            }
+
+            SaveData data = new SaveData
+            {
+                InventorySaveData = inventoryData,
+                CellSaves = cellsData
+            };
+
+            _saveSystem.Save(data);
         }
     }
 }

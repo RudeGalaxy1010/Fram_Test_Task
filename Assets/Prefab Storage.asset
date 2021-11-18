@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _crops:
   - {fileID: 11400000, guid: 5adce1adb9b11104981f4af550883710, type: 2}
+  _animals:
+  - {fileID: 11400000, guid: ec0474b83fc192440b2458554a0a76e5, type: 2}
+  - {fileID: 11400000, guid: d1227e93cd9ef964180f9ccb6d947eb3, type: 2}

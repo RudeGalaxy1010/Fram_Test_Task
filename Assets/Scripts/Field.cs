@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -81,19 +82,11 @@ namespace Farm.Core
                 return;
             }
 
-            if (cropSettings.Requirement.Quantity > 0)
-            {
-                if (!_inventory.Has(cropSettings.Requirement))
-                {
-                    return;
-                }
-
-                _inventory.Remove(cropSettings.Requirement);
-            }
-
             if (_selectedCell.IsFree)
             {
-                _selectedCell.SummonCrop(cropSettings);
+                Crop crop = new Crop();
+                crop.Init(cropSettings);
+                _selectedCell.SummonCrop(crop, cropSettings.Prefab);
             }
 
             DeselectCell();

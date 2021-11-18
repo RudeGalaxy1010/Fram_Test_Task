@@ -2,17 +2,17 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
-public class CropItemButton : MonoBehaviour
+public class AnimalItemButton : MonoBehaviour
 {
     [SerializeField] private Image _frame;
 
-    private CropSettings _cropSettings;
+    private AnimalSettings _animalSettings;
 
-    public CropSettings Crop => _cropSettings;
+    public AnimalSettings Animal => _animalSettings;
 
-    public void Init(CropSettings cropSettings)
+    public void Init(AnimalSettings animalSettings)
     {
-        _cropSettings = cropSettings;
+        _animalSettings = animalSettings;
     }
 
     public void Select()
