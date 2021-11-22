@@ -14,12 +14,14 @@ namespace Farm.Core
         public Productable Productable { get; private set; }
 
         private View _view { get; set; }
+        private Vector3 _position { get; set; }
 
         public bool IsFree => Productable == null;
 
         public void Init(int id)
         {
             Id = id;
+            _position = transform.position;
             Clear();
         }
 

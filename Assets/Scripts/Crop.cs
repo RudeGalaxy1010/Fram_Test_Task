@@ -12,5 +12,15 @@ namespace Farm.Core
         {
             return true;
         }
+
+        public override object GetValues()
+        {
+            return this;
+        }
+
+        public override void SetValues(object data)
+        {
+            base.SetValues(data);
+        }
     }
 }

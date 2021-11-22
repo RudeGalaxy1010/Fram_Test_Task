@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 1
   Name: Chicken
-  ProductionTime: 10
+  ProductionTime: 1
   Input:
     Resource:
       Item: {fileID: 11400000, guid: a0a11b18346508d4e9d0b66cac709e90, type: 2}
       Quantity: 1
-    ConsumingTime: 30
+    ConsumingTime: 3
   Output:
     Item: {fileID: 11400000, guid: 6e99684a8bee6c741870d18fd8755cb6, type: 2}
     Quantity: 1

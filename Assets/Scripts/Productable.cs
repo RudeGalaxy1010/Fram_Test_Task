@@ -2,14 +2,14 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-public abstract class Productable
+public abstract class Productable : ISaveAgent<object>
 {
     public UnityAction<float> Updated;
 
-    public float ProductionTime { get; private set; }
-    public float ProductionTimer { get; private set; }
-    public Resource Output { get; private set; }
-    public Resource OutputStorage { get; private set; }
+    public float ProductionTime { get; protected set; }
+    public float ProductionTimer { get; protected set; }
+    public Resource Output { get; protected set; }
+    public Resource OutputStorage { get; protected set; }
 
     public float Progress => Mathf.Min(ProductionTimer / ProductionTime, 1f);
 
@@ -58,5 +58,18 @@ public abstract class Productable
         Resource resource = new Resource(OutputStorage);
         OutputStorage = new Resource(Output.Item, 0);
         return resource;
+    }
+
+    public virtual object GetValues()
+    {
+        return this;
+    }
+
+    public virtual void SetValues(object data)
+    {
+        ProductionTime = ((Productable)data).ProductionTime;
+        ProductionTimer = ((Productable)data).ProductionTimer;
+        Output = ((Productable)data).Output;
+        OutputStorage = ((Productable)data).OutputStorage;
     }
 }

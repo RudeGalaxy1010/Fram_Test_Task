@@ -1,3 +1,4 @@
+using UnityEngine;
 using System;
 
 [Serializable]
@@ -46,5 +47,19 @@ public class Animal : Productable
         }
 
         return true;
+    }
+
+    public override object GetValues()
+    {
+        return this;
+    }
+
+    public override void SetValues(object data)
+    {
+        base.SetValues(data);
+
+        Input = ((Animal)data).Input;
+        InputStorage = ((Animal)data).InputStorage;
+        _consumingTimer = ((Animal)data)._consumingTimer;
     }
 }

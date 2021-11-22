@@ -1,25 +1,18 @@
 using UnityEngine;
 
-public class PlayerPrefsSaveSystem
+public static class PlayerPrefsSaveSystem
 {
     private const string SAVE_KEY = "FarmGameSave";
-    private JsonSerializer _serializer;
 
-    public PlayerPrefsSaveSystem(JsonSerializer serializer)
+    public static bool HasSave => PlayerPrefs.HasKey(SAVE_KEY);
+
+    public static T Load<T>()
     {
-        _serializer = serializer;
+        return JsonUtility.FromJson<T>(PlayerPrefs.GetString(SAVE_KEY));
     }
 
-    public bool HasSave => PlayerPrefs.HasKey(SAVE_KEY);
-
-    public SaveData Load()
+    public static void Save<T>(T data)
     {
-        return _serializer.Deserialize(PlayerPrefs.GetString(SAVE_KEY));
-    }
-
-    public void Save(SaveData data)
-    {
-        string dataString = _serializer.Serialize(data);
-        PlayerPrefs.SetString(SAVE_KEY, dataString);
+        PlayerPrefs.SetString(SAVE_KEY, JsonUtility.ToJson(data));
     }
 }

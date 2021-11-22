@@ -1,14 +1,18 @@
-using System.Linq;
+using System;
 using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine.Events;
 
-public class Inventory
+[Serializable]
+public class Inventory : ISaveAgent<Inventory>
 {
+    public UnityAction<List<Resource>> Changed;
+    public UnityAction Cleared;
+
     public List<Resource> Resources { get; private set; }
 
-    public void Init(List<Resource> resources)
+    public Inventory()
     {
-        Resources = resources;
+        Resources = new List<Resource>();
     }
 
     public bool Has(Resource resource)
@@ -31,23 +35,48 @@ public class Inventory
             if (Resources[i].Equals(resource))
             {
                 Resources[i] = new Resource(resource.Item, Resources[i].Quantity + resource.Quantity);
+                Changed?.Invoke(Resources);
                 return;
             }
         }
 
         Resources.Add(new Resource(resource));
+        Changed?.Invoke(Resources);
     }
 
     public void Remove(Resource resource)
     {
-        // TODO:
+        if (!Has(resource))
+        {
+            throw new System.Exception("Not enough resources");
+        }
+
         for (int i = 0; i < Resources.Count; i++)
         {
             if (Resources[i].Equals(resource))
             {
                 Resources[i] = new Resource(resource.Item, Resources[i].Quantity - resource.Quantity);
+                Changed?.Invoke(Resources);
                 return;
             }
         }
+        Changed?.Invoke(Resources);
+    }
+
+    public void Clear()
+    {
+        Resources.Clear();
+        Changed?.Invoke(Resources);
+        Cleared?.Invoke();
+    }
+
+    public Inventory GetValues()
+    {
+        return this;
+    }
+
+    public void SetValues(Inventory data)
+    {
+        Resources = data.Resources;
     }
 }
