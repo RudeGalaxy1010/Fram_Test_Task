@@ -13,6 +13,7 @@ public static class PlayerPrefsSaveSystem
 
     public static void Save<T>(T data)
     {
+        Debug.Log(JsonUtility.ToJson(data));
         PlayerPrefs.SetString(SAVE_KEY, JsonUtility.ToJson(data));
     }
 }

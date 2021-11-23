@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class SaveData
 {
-    public Inventory Inventory;
+    public List<Resource> Inventory;
     public int LevelIndex;
 }

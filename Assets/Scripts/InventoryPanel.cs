@@ -12,7 +12,7 @@ public class InventoryPanel : MonoBehaviour
 
     public void Bind(Inventory inventory)
     {
-        _items = new List<ItemView>();
+        ClearItems();
         _inventory = inventory;
         _inventory.Changed += UpdateItems;
         _inventory.Cleared += ClearItems;
@@ -41,6 +41,11 @@ public class InventoryPanel : MonoBehaviour
 
     private void CreateItems(int count)
     {
+        if (_items == null)
+        {
+            _items = new List<ItemView>();
+        }
+
         for (int i = 0; i < count; i++)
         {
             ItemView item = Instantiate(_itemPrefab, _itemsHandler.transform.position,
@@ -51,6 +56,11 @@ public class InventoryPanel : MonoBehaviour
 
     public void ClearItems()
     {
+        if (_items == null)
+        {
+            return;
+        }
+
         for (int i = 0; i < _items.Count; i++)
         {
             Destroy(_items[i].gameObject);

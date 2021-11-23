@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.Events;
 
 [Serializable]
-public class Inventory : ISaveAgent<Inventory>
+public class Inventory : ISaveAgent<List<Resource>>
 {
     public UnityAction<List<Resource>> Changed;
     public UnityAction Cleared;
@@ -70,13 +70,15 @@ public class Inventory : ISaveAgent<Inventory>
         Cleared?.Invoke();
     }
 
-    public Inventory GetValues()
+    public List<Resource> GetValues()
     {
-        return this;
+        return Resources;
     }
 
-    public void SetValues(Inventory data)
+    public void SetValues(List<Resource> data)
     {
-        Resources = data.Resources;
+        Clear();
+        Resources = data;
+        Changed?.Invoke(Resources);
     }
 }

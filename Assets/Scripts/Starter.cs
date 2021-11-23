@@ -21,16 +21,14 @@ namespace Farm.Core
 
         private void Start()
         {
+            _inventory = new Inventory();
+            _inventoryDisplay.Bind(_inventory);
+
             if (PlayerPrefsSaveSystem.HasSave)
             {
                 LoadAll();
             }
-            else
-            {
-                _inventory = new Inventory();
-            }
 
-            _inventoryDisplay.Bind(_inventory);
             _targets.Complete += () =>
             {
                 _levelManager.SwitchNextLevel();
@@ -40,21 +38,6 @@ namespace Farm.Core
 
             GenerateLevel();
             _cropsPanel.Init(_field);
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                SaveAll();
-            }
-
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                _levelManager.SwitchNextLevel();
-                ClearLevel();
-                GenerateLevel();
-            }
         }
 
         public void ClearLevel()
@@ -78,12 +61,13 @@ namespace Farm.Core
             _field.Init(_cells, _inventory);
             _targets.Init(_inventory, _levelManager.LevelData.Targets.Resources);
             _targetsPanel.Init(_levelManager.LevelData.Targets);
+            _inventoryDisplay.Bind(_inventory);
         }
 
         public void SaveAll()
         {
             SaveData data = new SaveData();
-            data.Inventory = _inventory;
+            data.Inventory = _inventory.GetValues();
             data.LevelIndex = _levelManager.GetValues();
             PlayerPrefsSaveSystem.Save(data);
         }
@@ -91,8 +75,13 @@ namespace Farm.Core
         public void LoadAll()
         {
             SaveData data = PlayerPrefsSaveSystem.Load<SaveData>();
-            _inventory = data.Inventory;
+            _inventory.SetValues(data.Inventory);
             _levelManager.SetValues(data.LevelIndex);
+        }
+
+        private void OnApplicationQuit()
+        {
+            SaveAll();
         }
 
         private void OnDestroy()
